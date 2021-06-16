@@ -1,6 +1,7 @@
 // watcher 是一个类， 他负责收集模版或者用户自己写的 watch 中的依赖
 // 最后 dep 收集是每个组件的 watcher （一个实例）， dep 通知 watcher ， watcher 再通知到里面的具体依赖
 export default class Watcher {
+    // 组件初始化， 会执行以下 表达式
     constructor (vm, expOrFn, cb) {
         this.vm = vm
         // getter 的目的是， 通过执行 getter 读取 data.a.b.c 的内容
@@ -23,3 +24,4 @@ export default class Watcher {
         this.cb.call(this.vm, this.value, oldValue)
     } 
 }
+
