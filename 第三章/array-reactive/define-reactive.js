@@ -1,4 +1,5 @@
 let {Dep} = require('./dep.js')
+let {arrayMethods} = require('./array-incepter.js')
 
 function defineReactive(data, key, val) {
     // new Observer(val)
@@ -26,10 +27,12 @@ function defineReactive(data, key, val) {
     })
 }
 
-class Observer {
+class Observer { // 需要将一个数据转换成响应式, 就需要通过Observer
     constructor(val) {
         this.value = val
-        if(!Array.isArray(this.value)) { // 判断传过来的是对象, 就执行 walk
+        if(Array.isArray(this.value)) { // 判断传过来的是对象, 就执行 walk
+            val.__proto__ = arrayMethods // 只针对需要监听的值, 将劫持原型赋值给__proto__
+        } else {
             this.walk(this.value)
         }
     }
