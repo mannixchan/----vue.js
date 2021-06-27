@@ -9,14 +9,14 @@ class Watcher {
     get() {
         window.target = this
         let value = this.getter.call(this.vm, this.vm)
-        this.getter()
+        // this.getter()
         window.target = null
         return value
     }
     update() {
         let oldValue = this.value
         this.value = this.get()
-        this.cb.call(this.vm, this.value, this.oldValue)
+        this.cb.call(this.vm, this.value, oldValue)
     }
 }
 module.exports = {

@@ -12,7 +12,11 @@ const
         configurable: true,
         writable: true,
         value: function mutator(...args) {
-            return original.apply(this, args)
+
+            const result = original.apply(this, args)
+            const ob = this.__ob__
+            ob.dep.notify()
+            return result
         }
     })
 })
