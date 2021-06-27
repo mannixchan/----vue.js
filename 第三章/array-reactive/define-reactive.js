@@ -27,5 +27,8 @@ function defineReactive(data, key, val) {
         }
     })
 }
+module.exports = {
+    defineReactive
+}
 
 

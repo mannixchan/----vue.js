@@ -1,3 +1,4 @@
+const {defineReactive} = require ('./define-reactive.js')
 // 判断浏览器是否支持 __proto__
 const hasProto = '__proto__' in {} // in, 只要能访问到, 无论是否原型, 是否可枚举都可以访问到
 const arrayKeys = Object.getOwnPropertyNames(arrayMethods) // 可以访问实例上的所有属性, 包括不可枚举的
@@ -10,6 +11,7 @@ class Observer { // 需要将一个数据转换成响应式, 就需要通过Obse
         if(Array.isArray(this.value)) { // 判断传过来的是对象, 就执行 walk
             const augment = hasProto ? protoAugment : copyAugment
             augment( val,arrayMethods, arrayKeys)
+            this.observerArray(value)
         } else {
             this.walk(this.value)
         }
@@ -25,6 +27,11 @@ class Observer { // 需要将一个数据转换成响应式, 就需要通过Obse
             defineReactive(obj, keys[i], obj[keys[i]])
         }
     }
+    observerArray (array) {
+        for(let i = 0, l = array.length; i < l; i++) {
+            observer(array[i])
+        }
+    }
 }
 // 浏览器适配
 function protoAugment(val, arrayMethods, arrayKeys) { 
@@ -38,6 +45,7 @@ function copyAugment(val, arrayMethods, arrayKeys) {
         })
     }
 }
+ 
 function def (obj, key, val, enumerable) {
     Object.defineProperty(obj, key, {
         value: val,
