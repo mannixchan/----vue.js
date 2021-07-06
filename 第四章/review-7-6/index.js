@@ -1,3 +1,14 @@
+function set(target, key, val) {
+    // 如果是数组
+    if(Array.isArray(target) && isValidArrayIndex(key)) {
+        target.length = Math.max(target.length || key)
+        target.splice(key, 1, val)
+        return val
+    }
+    // 查看是否已经存在该属性, 并且不在原型上
+    if(key in target && !(key in Object.prototype)) {
+        //直接赋值就可以
+        target[key] = val
         return val
     }
     // 看是否是响应式数据
