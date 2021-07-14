@@ -14,6 +14,7 @@ vue.prototype.$on = function(event, fn) {
 }
 
 Vue.prototype.$off = function(event, fn) {
+  const vm = this
   //没传参数, 就清空所有的事件
   if(!arguments.length) {
     vm._events = Object.create(null)
@@ -48,4 +49,31 @@ Vue.prototype.$off = function(event, fn) {
     return vm
 
   }
+}
+
+Vue.prototype.$once = function(event, fn) {
+  const vm = this
+  function on() {
+    vm.$off(event, on)
+    fn.apply(vm, arguments)
+  }
+  on.fn = fn
+  vm.$on(event, on)
+  return vm
+}
+
+Vue.prototype.$emit = function(event) {
+  const vm = this
+  let cbs = vm._events[event]
+  if(cbs) {
+    let args = toArray(arguments, 1)
+    for(let i = 0, l = cbs.length; i < l ; i++) {
+      try {
+        cbs[i].apply(vm, args)
+      } catch(e) {
+        hadleError(e, '....')
+      }
+    }
+  }
+  return vm
 }
