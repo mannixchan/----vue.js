@@ -12,3 +12,40 @@ vue.prototype.$on = function(event, fn) {
   return vm
   // 注册自定义事件然后返回的是组件自身
 }
+
+Vue.prototype.$off = function(event, fn) {
+  //没传参数, 就清空所有的事件
+  if(!arguments.length) {
+    vm._events = Object.create(null)
+    return vm
+  }
+
+  // event为数组就要一个个注销事件
+  if(Array.isArray(event)) {
+    for(let i = 0, l = event.length; i < l; i++) {
+      vm.$off(event[i], fn)
+    }
+    return vm
+  }
+  // 不存在本事件 return
+  let cbs = vm._events[event]
+  if(!cb) {return vm}
+  // 如果, 只传一个参数, 清空所有该事件
+  if(arguments.length === 1) {
+    vm._event[event] = null
+    return vm
+  }
+  // 如果传了, fn, 则清空该fn
+  if(fn) {
+    let cb;
+    let i = cbs.length
+    while(i--) {
+      if(cb === fn || cb.fn === fn) {
+        cbs.splice(i, 1)
+        break
+      }
+    }
+    return vm
+
+  }
+}
